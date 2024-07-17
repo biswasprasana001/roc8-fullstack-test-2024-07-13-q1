@@ -74,5 +74,46 @@ export default function Home() {
     return grid.some((row) => row.includes(1));
   };
 
-  return <></>;
+  return (
+    <div className="text-center flex flex-col justify-center items-center h-screen w-screen">
+      <h1 className="mb-5 text-white font-size-1rem font-bold">
+        Conway's Game of Life
+      </h1>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))`,
+          width: "fit-content",
+          margin: "0 auto",
+        }}
+      >
+        {grid.map((rows, i) =>
+          rows.map((col, k) => (
+            <div
+              key={`${i}-${k}`}
+              onClick={() => {
+                // Deep clone grid
+                let newGrid = JSON.parse(JSON.stringify(grid));
+                newGrid[i][k] = grid[i][k] ? 0 : 1;
+                setGrid(newGrid);
+              }}
+              style={{
+                width: 25,
+                height: 25,
+                backgroundColor: grid[i][k] ? "white" : "",
+                border: "1px solid #555555",
+              }}
+            ></div>
+          ))
+        )}
+      </div>
+      <div className="buttons m-5 flex justify-center">
+        <button onClick={() => setRunning(!running)} disabled={!checkOne(grid)}>
+          {running ? "Start" : "Stop"}
+        </button>
+        <button onClick={() => setGrid(genEmpGrid())}>Clear</button>
+        <button onClick={() => setGrid(genRandomGrid())}>Random</button>
+      </div>
+    </div>
+  );
 }
